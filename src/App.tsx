@@ -10,6 +10,8 @@ import AIInsights from './pages/AIInsights';
 import AIAssistant from './pages/AIAssistant';
 import CampaignsPage from './pages/CampaignsPage';
 import AIWorkflows from './pages/AIWorkflows';
+import WorkflowDetails from './pages/WorkflowDetails';
+import AIAgents from './pages/AIAgents';
 
 const queryClient = new QueryClient();
 
@@ -25,8 +27,9 @@ const App = () => (
             <Route path="/analytics" element={<Index />} />
             <Route path="/ai-insights" element={<AIInsights />} />
             <Route path="/ai-assistant" element={<AIAssistant />} />
-            <Route path="/ai-agents" element={<div className="p-8">AI Agents Page</div>} />
+            <Route path="/ai-agents" element={<AIAgents />} />
             <Route path="/ai-workflows" element={<AIWorkflows />} />
+            <Route path="/ai-workflows/:id" element={<WorkflowDetails />} />
             <Route path="/content-library" element={<div className="p-8">Content Library Page</div>} />
             <Route path="/budget" element={<div className="p-8">Budget Page</div>} />
             <Route path="/performance" element={<div className="p-8">Performance Page</div>} />

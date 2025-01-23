@@ -15,7 +15,8 @@ import {
   ArrowLeftRight,
   Pencil,
   Workflow,
-  Settings
+  Settings,
+  BrainCircuit
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -40,7 +41,7 @@ const menuItems = [
   { icon: Megaphone, label: 'Campaigns', path: '/campaigns' },
   { icon: Lightbulb, label: 'AI Insights', path: '/ai-insights' },
   { icon: Bot, label: 'AI Assistant', path: '/ai-assistant' },
-  { icon: Bot, label: 'AI Agents', path: '/ai-agents' },
+  { icon: BrainCircuit, label: 'AI Agents', path: '/ai-agents' },
   { icon: WorkflowIcon, label: 'AI Workflows', path: '/ai-workflows' },
   { icon: Library, label: 'Content Library', path: '/content-library' }
 ];
