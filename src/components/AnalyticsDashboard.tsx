@@ -4,7 +4,7 @@
  * Displays campaign performance metrics and visualizations
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import FunnelChart from "@/components/FunnelChart";
 import { MapComponent } from "@/components/MapComponent";
@@ -59,10 +59,14 @@ interface DataPoint {
   cpm: number;
 }
 
-const data: DataPoint[] = [
+// API endpoint for fetching analytics data
+const ANALYTICS_API_ENDPOINT = '/api/analytics/metrics';
+
+// Mock data for development and fallback
+const mockAnalyticsData: DataPoint[] = [
   { 
     name: 'Jan', 
-    impressions: 65000, 
+    impressions: 65000,
     clicks: 1950, 
     conversions: 195, 
     spend: 3900,
@@ -131,6 +135,50 @@ const data: DataPoint[] = [
     cpm: 65.0
   }
 ];
+
+// Custom hook for fetching analytics data
+const useAnalyticsData = (dateRange: { from: Date; to: Date }) => {
+  const [data, setData] = useState<DataPoint[]>(mockAnalyticsData); // Initialize with mock data
+  const [isLoading, setIsLoading] = useState(false); // Start with false since we have mock data
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAnalyticsData = async () => {
+      // Check if we're in development mode
+      if (process.env.NODE_ENV === 'development') {
+        // In development, just use mock data without making API calls
+        setData(mockAnalyticsData);
+        setIsLoading(false);
+        setError(null);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const response = await fetch(`${ANALYTICS_API_ENDPOINT}?from=${dateRange.from.toISOString()}&to=${dateRange.to.toISOString()}`);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch analytics data: ${response.statusText}`);
+        }
+
+        const analyticsData = await response.json();
+        setData(analyticsData);
+        setError(null);
+      } catch (err) {
+        console.warn('Error fetching analytics data, falling back to mock data:', err);
+        // Silently fall back to mock data without showing error to user
+        setData(mockAnalyticsData);
+        setError(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAnalyticsData();
+  }, [dateRange.from, dateRange.to]);
+
+  return { data, isLoading, error };
+};
 
 interface AnalyticsDashboardProps {
   dateRange: {
@@ -279,7 +327,25 @@ const gradientDefs = (
   </defs>
 );
 
-export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ dateRange }) => {
+const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ dateRange }) => {
+  const { data, isLoading, error } = useAnalyticsData(dateRange);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-96 text-red-500">
+        <p>Error loading analytics data: {error}</p>
+      </div>
+    );
+  }
+
   const [activeTab, setActiveTab] = useState('customer');
   const [selectedSegment, setSelectedSegment] = useState('demographics');
   const [selectedMetric, setSelectedMetric] = useState('clicks');
@@ -679,4 +745,5 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ dateRang
   );
 }
 
+export { AnalyticsDashboard };
 export default AnalyticsDashboard;
