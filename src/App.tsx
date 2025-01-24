@@ -12,6 +12,7 @@ import CampaignsPage from './pages/CampaignsPage';
 import AIWorkflows from './pages/AIWorkflows';
 import WorkflowDetails from './pages/WorkflowDetails';
 import AIAgents from './pages/AIAgents';
+import AgentCustomization from './pages/AgentCustomization';
 
 const queryClient = new QueryClient();
 
@@ -28,8 +29,10 @@ const App = () => (
             <Route path="/ai-insights" element={<AIInsights />} />
             <Route path="/ai-assistant" element={<AIAssistant />} />
             <Route path="/ai-agents" element={<AIAgents />} />
+            <Route path="/campaign-strategist/customize" element={<AgentCustomization />} />
             <Route path="/ai-workflows" element={<AIWorkflows />} />
             <Route path="/ai-workflows/:id" element={<WorkflowDetails />} />
+            <Route path="/agents/:id/customize" element={<AgentCustomization />} />
             <Route path="/content-library" element={<div className="p-8">Content Library Page</div>} />
             <Route path="/budget" element={<div className="p-8">Budget Page</div>} />
             <Route path="/performance" element={<div className="p-8">Performance Page</div>} />
