@@ -36,7 +36,6 @@ const AgentCustomization = () => {
       name: "Campaign Strategy Development",
       description: "Create data-driven marketing strategies",
       enabled: true,
-      proficiency: "expert",
       tools: ["Market Analysis", "Competitor Research", "Trend Analysis"],
       customInstructions: ""
     },
@@ -45,7 +44,6 @@ const AgentCustomization = () => {
       name: "Content Creation",
       description: "Generate engaging marketing content",
       enabled: true,
-      proficiency: "intermediate",
       tools: ["Copywriting", "Visual Design", "A/B Testing"],
       customInstructions: ""
     },
@@ -54,7 +52,6 @@ const AgentCustomization = () => {
       name: "Market Analysis",
       description: "Analyze market trends and opportunities",
       enabled: true,
-      proficiency: "expert",
       tools: ["Data Analytics", "Market Research", "Trend Forecasting"],
       customInstructions: ""
     },
@@ -63,7 +60,6 @@ const AgentCustomization = () => {
       name: "Budget Optimization",
       description: "Optimize campaign budget allocation",
       enabled: true,
-      proficiency: "advanced",
       tools: ["ROI Analysis", "Cost Optimization", "Performance Tracking"],
       customInstructions: ""
     },
@@ -72,7 +68,6 @@ const AgentCustomization = () => {
       name: "Performance Tracking",
       description: "Monitor and analyze campaign performance",
       enabled: true,
-      proficiency: "expert",
       tools: ["Analytics", "Reporting", "KPI Tracking"],
       customInstructions: ""
     }
@@ -409,16 +404,16 @@ const AgentCustomization = () => {
 
           {/* Capabilities Tab */}
           <TabsContent value="capabilities" className="space-y-6">
-            <Card className="bg-[#1A0B2E] border-[#6D28D9]/20">
-              <CardHeader className="border-b border-[#6D28D9]/20">
+            <Card className="bg-[#1A0B2E] border-[#6D28D9]/20 shadow-lg">
+              <CardHeader className="border-b border-[#6D28D9]/20 px-6 py-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-purple-100">Agent Capabilities</CardTitle>
-                    <CardDescription className="text-purple-300/70">Customize the agent's capabilities and expertise levels</CardDescription>
+                    <CardTitle className="text-purple-100 text-xl font-semibold">Agent Capabilities</CardTitle>
+                    <CardDescription className="text-purple-300/70 mt-1">Customize the agent's capabilities and expertise levels</CardDescription>
                   </div>
                   <Button
                     variant="outline"
-                    className="bg-[#2D1B69]/30 border-[#6D28D9]/20 hover:border-[#6D28D9]/40 text-purple-100"
+                    className="bg-[#2D1B69]/30 border-[#6D28D9]/20 hover:border-[#6D28D9]/40 hover:bg-[#2D1B69]/50 text-purple-100 transition-all duration-200 shadow-sm"
                     onClick={() => console.log('Add capability')}
                   >
                     Add Capability
@@ -430,33 +425,23 @@ const AgentCustomization = () => {
                   {capabilities.map((capability) => (
                     <div
                       key={capability.id}
-                      className="bg-[#2D1B69]/30 rounded-lg border border-[#6D28D9]/20 hover:border-[#6D28D9]/40 transition-all overflow-hidden"
+                      className="bg-[#2D1B69]/30 rounded-xl border border-[#6D28D9]/20 hover:border-[#6D28D9]/40 transition-all duration-200 shadow-md hover:shadow-lg overflow-hidden transform hover:-translate-y-0.5"
                     >
-                      <div className="p-4 flex items-center justify-between border-b border-[#6D28D9]/20">
-                        <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-gradient-to-r from-[#2D1B69] to-[#6D28D9] rounded-full">
-                            <span className="text-white text-sm">{capability.id}</span>
+                      <div className="p-5 flex items-center justify-between border-b border-[#6D28D9]/20">
+                        <div className="flex items-center gap-5">
+                          <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gradient-to-r from-[#2D1B69] to-[#6D28D9] rounded-lg shadow-inner">
+                            <span className="text-white text-lg font-medium">{capability.id}</span>
                           </div>
                           <div>
-                            <h4 className="text-purple-100 font-medium">{capability.name}</h4>
-                            <p className="text-sm text-purple-300/70">{capability.description}</p>
+                            <h4 className="text-purple-100 font-semibold text-lg mb-1">{capability.name}</h4>
+                            <p className="text-sm text-purple-300/70 leading-relaxed">{capability.description}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <Badge 
-                            className={`
-                              ${capability.proficiency === 'expert' ? 'bg-gradient-to-r from-purple-600 to-purple-400' :
-                                capability.proficiency === 'advanced' ? 'bg-gradient-to-r from-blue-600 to-blue-400' :
-                                'bg-gradient-to-r from-indigo-600 to-indigo-400'}
-                              text-white border-none px-3 py-1
-                            `}
-                          >
-                            {capability.proficiency.charAt(0).toUpperCase() + capability.proficiency.slice(1)}
-                          </Badge>
+                        <div className="flex items-center gap-4">
                           <Button
                             variant="outline"
                             size="sm"
-                            className="bg-[#2D1B69]/30 border-[#6D28D9]/20 hover:border-[#6D28D9]/40 text-purple-100"
+                            className="bg-[#2D1B69]/30 border-[#6D28D9]/20 hover:border-[#6D28D9]/40 hover:bg-[#2D1B69]/50 text-purple-100 transition-all duration-200 shadow-sm px-4"
                             onClick={() => setSelectedCapability(selectedCapability === capability.id ? null : capability.id)}
                           >
                             {selectedCapability === capability.id ? 'Close' : 'Configure'}
@@ -475,51 +460,31 @@ const AgentCustomization = () => {
                       </div>
 
                       {selectedCapability === capability.id && capability.enabled && (
-                        <div className="p-4 space-y-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <Label className="text-purple-100">Proficiency Level</Label>
-                              <select 
-                                value={capability.proficiency}
-                                onChange={(e) => {
-                                  setCapabilities(capabilities.map(cap => 
-                                    cap.id === capability.id ? {...cap, proficiency: e.target.value} : cap
-                                  ));
-                                }}
-                                className="w-full bg-[#2D1B69]/30 border border-[#6D28D9]/20 rounded-md p-2 text-purple-100"
-                              >
-                                <option value="beginner">Beginner</option>
-                                <option value="intermediate">Intermediate</option>
-                                <option value="advanced">Advanced</option>
-                                <option value="expert">Expert</option>
-                              </select>
-                            </div>
-
-                            <div className="space-y-2">
-                              <Label className="text-purple-100">Associated Tools</Label>
-                              <div className="flex flex-wrap gap-2">
-                                {capability.tools.map((tool, index) => (
-                                  <Badge 
-                                    key={index}
-                                    className="bg-[#2D1B69] text-purple-100 border border-[#6D28D9]/20"
-                                  >
-                                    {tool}
-                                  </Badge>
-                                ))}
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="bg-[#2D1B69]/30 border-[#6D28D9]/20 hover:border-[#6D28D9]/40 text-purple-100"
-                                  onClick={() => console.log('Add tool')}
+                        <div className="p-5 space-y-6 bg-[#1A0B2E]/30">
+                          <div className="space-y-3">
+                            <Label className="text-purple-100 font-medium">Associated Tools</Label>
+                            <div className="flex flex-wrap gap-2">
+                              {capability.tools.map((tool, index) => (
+                                <Badge
+                                  key={index}
+                                  className="bg-[#2D1B69]/50 hover:bg-[#2D1B69]/70 text-purple-100 border-[#6D28D9]/20 px-3 py-1 transition-colors duration-200"
                                 >
-                                  + Add Tool
-                                </Button>
-                              </div>
+                                  {tool}
+                                </Badge>
+                              ))}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="bg-[#2D1B69]/30 border-[#6D28D9]/20 hover:border-[#6D28D9]/40 text-purple-100 h-7"
+                                onClick={() => console.log('Add tool')}
+                              >
+                                + Add Tool
+                              </Button>
                             </div>
                           </div>
 
-                          <div className="space-y-2">
-                            <Label className="text-purple-100">Custom Instructions</Label>
+                          <div className="space-y-3 pt-2">
+                            <Label className="text-purple-100 font-medium">Custom Instructions</Label>
                             <textarea
                               value={capability.customInstructions}
                               onChange={(e) => {
@@ -528,26 +493,8 @@ const AgentCustomization = () => {
                                 ));
                               }}
                               placeholder="Add specific instructions or preferences for this capability..."
-                              className="w-full h-24 bg-[#2D1B69]/30 border border-[#6D28D9]/20 rounded-md p-2 text-purple-100 placeholder:text-purple-300/50"
+                              className="w-full h-32 bg-[#2D1B69]/30 border border-[#6D28D9]/20 hover:border-[#6D28D9]/40 rounded-lg p-3 text-purple-100 placeholder:text-purple-300/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#6D28D9]/40"
                             />
-                          </div>
-
-                          <div className="pt-4 flex justify-end gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="bg-[#2D1B69]/30 border-[#6D28D9]/20 hover:border-[#6D28D9]/40 text-purple-100"
-                              onClick={() => setSelectedCapability(null)}
-                            >
-                              Cancel
-                            </Button>
-                            <Button
-                              size="sm"
-                              className="bg-gradient-to-r from-[#2D1B69] to-[#6D28D9] text-white border-none"
-                              onClick={() => console.log('Save changes')}
-                            >
-                              Save Changes
-                            </Button>
                           </div>
                         </div>
                       )}
