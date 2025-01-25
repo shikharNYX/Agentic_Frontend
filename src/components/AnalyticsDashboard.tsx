@@ -59,125 +59,46 @@ interface DataPoint {
   cpm: number;
 }
 
-// API endpoint for fetching analytics data
-const ANALYTICS_API_ENDPOINT = '/api/analytics/metrics';
-
-// Mock data for development and fallback
-const mockAnalyticsData: DataPoint[] = [
-  { 
-    name: 'Jan', 
-    impressions: 65000,
-    clicks: 1950, 
-    conversions: 195, 
-    spend: 3900,
-    cpc: 2.0,
-    ctr: 3.0,
-    cpm: 60.0
-  },
-  { 
-    name: 'Feb', 
-    impressions: 85000, 
-    clicks: 2975, 
-    conversions: 238, 
-    spend: 5355,
-    cpc: 1.8,
-    ctr: 3.5,
-    cpm: 63.0
-  },
-  { 
-    name: 'Mar', 
-    impressions: 75000, 
-    clicks: 2625, 
-    conversions: 210, 
-    spend: 4462,
-    cpc: 1.7,
-    ctr: 3.5,
-    cpm: 59.5
-  },
-  { 
-    name: 'Apr', 
-    impressions: 95000, 
-    clicks: 3800, 
-    conversions: 285, 
-    spend: 6080,
-    cpc: 1.6,
-    ctr: 4.0,
-    cpm: 64.0
-  },
-  { 
-    name: 'May', 
-    impressions: 80000, 
-    clicks: 3200, 
-    conversions: 256, 
-    spend: 4800,
-    cpc: 1.5,
-    ctr: 4.0,
-    cpm: 60.0
-  },
-  { 
-    name: 'Jun', 
-    impressions: 100000, 
-    clicks: 4500, 
-    conversions: 360, 
-    spend: 6300,
-    cpc: 1.4,
-    ctr: 4.5,
-    cpm: 63.0
-  },
-  { 
-    name: 'Jul', 
-    impressions: 110000, 
-    clicks: 5500, 
-    conversions: 440, 
-    spend: 7150,
-    cpc: 1.3,
-    ctr: 5.0,
-    cpm: 65.0
-  }
-];
-
-// Custom hook for fetching analytics data
-const useAnalyticsData = (dateRange: { from: Date; to: Date }) => {
-  const [data, setData] = useState<DataPoint[]>(mockAnalyticsData); // Initialize with mock data
-  const [isLoading, setIsLoading] = useState(false); // Start with false since we have mock data
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchAnalyticsData = async () => {
-      // Check if we're in development mode
-      if (process.env.NODE_ENV === 'development') {
-        // In development, just use mock data without making API calls
-        setData(mockAnalyticsData);
-        setIsLoading(false);
-        setError(null);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${ANALYTICS_API_ENDPOINT}?from=${dateRange.from.toISOString()}&to=${dateRange.to.toISOString()}`);
-        
-        if (!response.ok) {
-          throw new Error(`Failed to fetch analytics data: ${response.statusText}`);
-        }
-
-        const analyticsData = await response.json();
-        setData(analyticsData);
-        setError(null);
-      } catch (err) {
-        console.warn('Error fetching analytics data, falling back to mock data:', err);
-        // Silently fall back to mock data without showing error to user
-        setData(mockAnalyticsData);
-        setError(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAnalyticsData();
-  }, [dateRange.from, dateRange.to]);
-
-  return { data, isLoading, error };
+// Mock data for development
+const mockData = {
+  accountMetrics: [
+    { label: 'Spend', value: '$12,345', change: 8.2 },
+    { label: 'Clicks', value: '1,234', change: 12.3 },
+    { label: 'Impressions', value: '123,456', change: -3.2 },
+    { label: 'CTR', value: '1.2%', change: 15.7 },
+    { label: 'CPC', value: '$10.01', change: -5.4 },
+    { label: 'Conversions', value: '321', change: 9.8 }
+  ],
+  timeSeriesData: [
+    { date: '2024-01-01', impressions: 15000, clicks: 750, conversions: 80 },
+    { date: '2024-01-02', impressions: 17500, clicks: 800, conversions: 90 },
+    { date: '2024-01-03', impressions: 16800, clicks: 820, conversions: 85 },
+    { date: '2024-01-04', impressions: 18200, clicks: 900, conversions: 95 },
+    { date: '2024-01-05', impressions: 17900, clicks: 850, conversions: 88 },
+    { date: '2024-01-06', impressions: 19500, clicks: 950, conversions: 100 },
+    { date: '2024-01-07', impressions: 20100, clicks: 1000, conversions: 110 }
+  ],
+  campaignPerformance: [
+    { name: 'Campaign A', spend: 5000, impressions: 50000, clicks: 2500, conversions: 125 },
+    { name: 'Campaign B', spend: 3500, impressions: 35000, clicks: 1750, conversions: 88 },
+    { name: 'Campaign C', spend: 2800, impressions: 28000, clicks: 1400, conversions: 70 },
+    { name: 'Campaign D', spend: 4200, impressions: 42000, clicks: 2100, conversions: 105 },
+    { name: 'Campaign E', spend: 3900, impressions: 39000, clicks: 1950, conversions: 98 }
+  ],
+  geographicData: [
+    { id: 'USA', value: 35 },
+    { id: 'GBR', value: 20 },
+    { id: 'CAN', value: 15 },
+    { id: 'AUS', value: 10 },
+    { id: 'DEU', value: 8 },
+    { id: 'FRA', value: 7 },
+    { id: 'IND', value: 5 }
+  ],
+  funnelData: [
+    { id: 'Impressions', value: 15420, label: 'Impressions' },
+    { id: 'Clicks', value: 8750, label: 'Clicks' },
+    { id: 'Conversions', value: 3200, label: 'Conversions' }
+  ]
 };
 
 interface AnalyticsDashboardProps {
@@ -187,14 +108,7 @@ interface AnalyticsDashboardProps {
   };
 }
 
-const accountMetrics = [
-  { label: 'Spend', value: '$12,345', change: 8.2 },
-  { label: 'Clicks', value: '1,234', change: 12.3 },
-  { label: 'Impressions', value: '123,456', change: -3.2 },
-  { label: 'CTR', value: '3.2%', change: 5.7 },
-  { label: 'CPC', value: '$2.45', change: -2.1 },
-  { label: 'CPM', value: '$18.50', change: 1.8 }
-];
+const accountMetrics = mockData.accountMetrics;
 
 const metricOptionsForChart = [
   { key: 'impressions', label: 'Impressions', color: '#4F46E5' },
@@ -328,27 +242,10 @@ const gradientDefs = (
 );
 
 const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ dateRange }) => {
-  const { data, isLoading, error } = useAnalyticsData(dateRange);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center h-96 text-red-500">
-        <p>Error loading analytics data: {error}</p>
-      </div>
-    );
-  }
-
+  const [selectedMetric, setSelectedMetric] = useState<string>('impressions');
+  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState('customer');
   const [selectedSegment, setSelectedSegment] = useState('demographics');
-  const [selectedMetric, setSelectedMetric] = useState('clicks');
   const [selectedMetrics, setSelectedMetrics] = useState(['impressions', 'clicks', 'ctr', 'spend']);
 
   const toggleMetric = (metric: string) => {
@@ -376,6 +273,14 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ dateRange }) =>
   const getDateRangeString = (): string => {
     return `${formatDate(dateRange.from)} - ${formatDate(dateRange.to)}`;
   };
+
+  // Use mock data directly
+  const data = mockData.timeSeriesData.map(item => ({
+    date: new Date(item.date).toLocaleDateString(),
+    impressions: item.impressions,
+    clicks: item.clicks,
+    conversions: item.conversions
+  }));
 
   return (
     <div className="p-4 min-h-screen bg-gradient-to-b from-[#0F0720] via-[#1A0B2E] to-[#0F0720]">
@@ -429,7 +334,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ dateRange }) =>
                     opacity={0.1} 
                   />
                   <XAxis 
-                    dataKey="name" 
+                    dataKey="date" 
                     axisLine={{ stroke: '#6D28D9' }}
                     tickLine={{ stroke: '#6D28D9' }}
                     tick={{ fill: '#E9D5FF', fontSize: 12 }}
