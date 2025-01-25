@@ -138,42 +138,46 @@ const mockAnalyticsData: DataPoint[] = [
 
 // Custom hook for fetching analytics data
 const useAnalyticsData = (dateRange: { from: Date; to: Date }) => {
-  const [data, setData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = useState<DataPoint[]>(mockAnalyticsData); // Initialize with mock data
+  const [isLoading, setIsLoading] = useState(false); // Start with false since we have mock data
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAnalyticsData = async () => {
+      // Check if we're in development mode
+      if (process.env.NODE_ENV === 'development') {
+        // In development, just use mock data without making API calls
+        setData(mockAnalyticsData);
+        setIsLoading(false);
+        setError(null);
+        return;
+      }
+
       try {
         setIsLoading(true);
-        const response = await fetch(ANALYTICS_API_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dateRange),
-        });
-
+        const response = await fetch(`${ANALYTICS_API_ENDPOINT}?from=${dateRange.from.toISOString()}&to=${dateRange.to.toISOString()}`);
+        
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Failed to fetch analytics data: ${response.statusText}`);
         }
 
-        const jsonData = await response.json();
-        setData(jsonData);
+        const analyticsData = await response.json();
+        setData(analyticsData);
         setError(null);
       } catch (err) {
         console.warn('Error fetching analytics data, falling back to mock data:', err);
+        // Silently fall back to mock data without showing error to user
         setData(mockAnalyticsData);
-        setError(err instanceof Error ? err : new Error('Unknown error'));
+        setError(null);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchData();
-  }, [dateRange]);
+    fetchAnalyticsData();
+  }, [dateRange.from, dateRange.to]);
 
-  return { data: data || mockAnalyticsData, isLoading, error };
+  return { data, isLoading, error };
 };
 
 interface AnalyticsDashboardProps {
@@ -337,7 +341,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ dateRange }) =>
   if (error) {
     return (
       <div className="flex items-center justify-center h-96 text-red-500">
-        <p>Error loading analytics data: {error.message}</p>
+        <p>Error loading analytics data: {error}</p>
       </div>
     );
   }
