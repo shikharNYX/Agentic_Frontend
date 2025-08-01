@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
+import B2BDashboard from "./pages/B2BDashboard";
 import AIInsights from './pages/AIInsights';
 import AIAssistant from './pages/AIAssistant';
 import CampaignsPage from './pages/CampaignsPage';
@@ -13,6 +14,7 @@ import AIWorkflows from './pages/AIWorkflows';
 import WorkflowDetails from './pages/WorkflowDetails';
 import AIAgents from './pages/AIAgents';
 import AgentCustomization from './pages/AgentCustomization';
+
 
 const queryClient = new QueryClient();
 
@@ -26,6 +28,8 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/analytics" element={<Index />} />
+
+            <Route path="/b2b-dashboard" element={<B2BDashboard />} />
             <Route path="/ai-insights" element={<AIInsights />} />
             <Route path="/ai-assistant" element={<AIAssistant />} />
             <Route path="/ai-agents" element={<AIAgents />} />

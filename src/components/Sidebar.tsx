@@ -16,7 +16,8 @@ import {
   Pencil,
   Workflow,
   Settings,
-  BrainCircuit
+  BrainCircuit,
+  Building
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -38,6 +39,8 @@ const WorkflowIcon = ({ className }: { className?: string }) => {
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
   { icon: BarChart2, label: 'Analytics', path: '/analytics' },
+
+  { icon: Building, label: 'B2B Dashboard', path: '/b2b-dashboard' },
   { icon: Megaphone, label: 'Campaigns', path: '/campaigns' },
   { icon: Lightbulb, label: 'AI Insights', path: '/ai-insights' },
   { icon: Bot, label: 'AI Assistant', path: '/ai-assistant' },
