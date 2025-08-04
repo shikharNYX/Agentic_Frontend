@@ -39,7 +39,6 @@ const WorkflowIcon = ({ className }: { className?: string }) => {
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
   { icon: BarChart2, label: 'Analytics', path: '/analytics' },
-
   { icon: Building, label: 'B2B Dashboard', path: '/b2b-dashboard' },
   { icon: Megaphone, label: 'Campaigns', path: '/campaigns' },
   { icon: Lightbulb, label: 'AI Insights', path: '/ai-insights' },

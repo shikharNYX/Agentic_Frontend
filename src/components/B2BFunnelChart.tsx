@@ -115,37 +115,47 @@ const B2BFunnelChart: React.FC<B2BFunnelChartProps> = ({
   const funnelData = [
     {
       name: 'MQL',
-      value: aggregateData.mql?.count || 0,
+      count: aggregateData.mql?.count || 0,
       conversionRate: aggregateData.mql?.conversionRate || 0,
       value: aggregateData.mql?.value || 0,
       fill: funnelColors[0]
     },
     {
       name: 'SQL',
-      value: aggregateData.sql?.count || 0,
+      count: aggregateData.sql?.count || 0,
       conversionRate: aggregateData.sql?.conversionRate || 0,
       value: aggregateData.sql?.value || 0,
       fill: funnelColors[1]
     },
     {
       name: 'Opportunity',
-      value: aggregateData.opportunity?.count || 0,
+      count: aggregateData.opportunity?.count || 0,
       conversionRate: aggregateData.opportunity?.conversionRate || 0,
       value: aggregateData.opportunity?.value || 0,
       fill: funnelColors[2]
     },
     {
       name: 'Closed Won',
-      value: aggregateData.closedWon?.count || 0,
+      count: aggregateData.closedWon?.count || 0,
       conversionRate: aggregateData.closedWon?.conversionRate || 0,
       value: aggregateData.closedWon?.value || 0,
       fill: funnelColors[3]
     }
   ];
 
+  // Separate data for funnel chart (using count for funnel visualization)
+  const funnelChartData = funnelData.map(item => ({
+    name: item.name,
+    value: item.count,
+    fill: item.fill,
+    conversionRate: item.conversionRate,
+    monetaryValue: item.value
+  }));
+
+  // Separate data for pie chart
   const pieData = funnelData.map(item => ({
     name: item.name,
-    value: item.value,
+    value: item.count,
     fill: item.fill
   }));
 
@@ -159,10 +169,10 @@ const B2BFunnelChart: React.FC<B2BFunnelChartProps> = ({
             Count: {data.value.toLocaleString()}
           </p>
           <p className="text-purple-300 text-sm">
-            Conversion Rate: {formatPercentage(data.conversionRate)}
+            Conversion Rate: {formatPercentage(data.conversionRate || 0)}
           </p>
           <p className="text-purple-300 text-sm">
-            Value: {formatCurrency(data.value)}
+            Value: {formatCurrency(data.monetaryValue || data.value || 0)}
           </p>
         </div>
       );
@@ -228,16 +238,16 @@ const B2BFunnelChart: React.FC<B2BFunnelChartProps> = ({
             {viewMode === 'funnel' ? (
               <RechartsFunnelChart>
                 <Tooltip content={<CustomTooltip />} />
-                <Funnel
-                  dataKey="value"
-                  data={funnelData}
-                  isAnimationActive={true}
-                  labelFormatter={(value) => `${value.toLocaleString()} leads`}
-                >
-                  {funnelData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Funnel>
+                                 <Funnel
+                   dataKey="value"
+                   data={funnelChartData}
+                   isAnimationActive={true}
+                   labelFormatter={(value) => `${value.toLocaleString()} leads`}
+                 >
+                   {funnelChartData.map((entry, index) => (
+                     <Cell key={`cell-${index}`} fill={entry.fill} />
+                   ))}
+                 </Funnel>
               </RechartsFunnelChart>
             ) : (
               <PieChart>
